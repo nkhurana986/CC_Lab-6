@@ -33,11 +33,8 @@ pipeline {
                   --name nginx-lb \
                   --network app-network \
                   -p 8081:80 \
-                  -v $(pwd)/nginx/lb.conf:/etc/nginx/conf.d/lb.conf:ro \
+                  -v $(pwd)/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro \
                   nginx
-
-                docker exec nginx-lb rm /etc/nginx/conf.d/default.conf
-                docker exec nginx-lb nginx -s reload
                 '''
             }
         }
