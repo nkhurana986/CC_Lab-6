@@ -23,25 +23,29 @@ pipeline {
                 '''
             }
         }
-stage('Deploy NGINX Load Balancer') {
-    steps {
-        sh '''
-        docker rm -f nginx-lb || true
 
-        docker run -d \
-          --name nginx-lb \
-          --network app-network \
-          -p 8081:80 \
-          -v $(pwd)/nginx/default.conf:/etc/nginx/conf.d/default.conf \
-          nginx
-        '''
-    }
-}
+        stage('Deploy NGINX Load Balancer') {
+            steps {
+                sh '''
+                docker rm -f nginx-lb || true
+
+                docker run -d \
+                  --name nginx-lb \
+                  --network app-network \
+                  -p 8081:80 \
+                  nginx
+
+                sleep 3
+
+                docker cp nginx/default.conf nginx-lb:/etc/nginx/conf.d/default.conf
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'Pipeline executed successfully. NGINX load balancer is running on port 8081.'
+            echo 'Pipeline executed successfully. NGINX load balancer running on port 8081.'
         }
         failure {
             echo 'Pipeline failed. Check console logs for errors.'
