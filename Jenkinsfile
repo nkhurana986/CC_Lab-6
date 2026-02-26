@@ -32,7 +32,7 @@ pipeline {
                 docker run -d \
                   --name nginx-lb \
                   --network app-network \
-                  -p 80:80 \
+                  -p 8081:80 \
                   nginx
 
                 docker cp nginx/default.conf nginx-lb:/etc/nginx/conf.d/default.conf
@@ -44,7 +44,7 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline executed successfully. NGINX load balancer is running.'
+            echo 'Pipeline executed successfully. NGINX load balancer is running on port 8081.'
         }
         failure {
             echo 'Pipeline failed. Check console logs for errors.'
